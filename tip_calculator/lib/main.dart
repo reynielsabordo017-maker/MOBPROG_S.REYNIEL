@@ -14,15 +14,12 @@ class TipApp extends StatelessWidget {
     return MaterialApp(
       title: 'Tip Calculator',
       debugShowCheckedModeBanner: false,
-
-      // Material 3 theme
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.deepPurple,
         ),
       ),
-
       home: const TipPage(),
     );
   }
@@ -61,7 +58,11 @@ class _TipPageState extends State<TipPage> {
       TextEditingController();
 
   // Default selected tip percentage
+  // This value is retained while the app is open.
   int _selectedPercent = 15;
+
+  // Number of people sharing the bill
+  int _peopleCount = 1;
 
   // Releases the controller when the screen is removed
   @override
@@ -88,7 +89,6 @@ class _TipPageState extends State<TipPage> {
 
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
-
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -141,7 +141,7 @@ class _TipPageState extends State<TipPage> {
                 prefixIcon: Icon(Icons.payments),
               ),
 
-              // Update the calculation whenever input changes
+              // Update calculation whenever input changes
               onChanged: (value) {
                 setState(() {});
               },
@@ -167,8 +167,6 @@ class _TipPageState extends State<TipPage> {
                 return ChoiceChip(
                   label: Text('$percent%'),
                   selected: _selectedPercent == percent,
-
-                  // Update the selected percentage
                   onSelected: (selected) {
                     setState(() {
                       _selectedPercent = percent;
@@ -178,14 +176,78 @@ class _TipPageState extends State<TipPage> {
               }).toList(),
             ),
 
-            const SizedBox(height: 32),
+            const SizedBox(height: 28),
+
+            // Split bill stepper
+            const Text(
+              'Split Between People',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 12),
+
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Number of People',
+                      style: TextStyle(fontSize: 15),
+                    ),
+
+                    Row(
+                      children: [
+                        // Decrease number of people
+                        IconButton(
+                          onPressed: _peopleCount > 1
+                              ? () {
+                                  setState(() {
+                                    _peopleCount--;
+                                  });
+                                }
+                              : null,
+                          icon: const Icon(Icons.remove_circle_outline),
+                        ),
+
+                        Text(
+                          '$_peopleCount',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+
+                        // Increase number of people
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _peopleCount++;
+                            });
+                          },
+                          icon: const Icon(Icons.add_circle_outline),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 28),
 
             // Calculation results
             Card(
               elevation: 2,
               child: Padding(
                 padding: const EdgeInsets.all(20),
-
                 child: Column(
                   children: [
                     const Text(
@@ -198,7 +260,7 @@ class _TipPageState extends State<TipPage> {
 
                     const SizedBox(height: 20),
 
-                    // Show tip and total or validation message
+                    // Show results or validation message
                     if (result == null) ...[
                       const Icon(
                         Icons.info_outline,
@@ -221,11 +283,20 @@ class _TipPageState extends State<TipPage> {
                         '₱${result.tip.toStringAsFixed(2)}',
                       ),
 
-                      const Divider(height: 28),
+                      const SizedBox(height: 12),
 
                       _resultRow(
                         'Total Amount',
                         '₱${result.total.toStringAsFixed(2)}',
+                        isTotal: true,
+                      ),
+
+                      const Divider(height: 28),
+
+                      // Amount each person should pay
+                      _resultRow(
+                        'Per Person ($_peopleCount people)',
+                        '₱${(result.total / _peopleCount).toStringAsFixed(2)}',
                         isTotal: true,
                       ),
                     ],
@@ -236,12 +307,13 @@ class _TipPageState extends State<TipPage> {
 
             const SizedBox(height: 24),
 
-            // Reset the calculator
+            // Reset bill and people count.
+            // Keep the last selected tip percentage.
             OutlinedButton.icon(
               onPressed: () {
                 setState(() {
                   _billController.clear();
-                  _selectedPercent = 15;
+                  _peopleCount = 1;
                 });
               },
               icon: const Icon(Icons.refresh),

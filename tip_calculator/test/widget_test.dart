@@ -46,6 +46,6 @@ void main() {
     await tester.pump();
 
     expect(find.text('₱75.00'), findsOneWidget);
-    expect(find.text('₱575.00'), findsOneWidget);
+    expect(find.text('₱575.00'), findsNWidgets(2));
   });
 }
