@@ -25,7 +25,19 @@ GAMEHUB is a Flutter-based gaming accessories catalog application that allows us
 
 ## Layout and Responsive Design
 
-GAMEHUB uses a responsive layout to provide a convenient browsing experience across different screen sizes. The application uses a single-column list layout for mobile screens with widths below 600 pixels, a two-column grid layout for tablet screens with widths from 600 to 839 pixels, and a three-column grid layout for desktop screens with widths of 840 pixels and above. The `LayoutBuilder` widget determines the available screen width and automatically selects the appropriate layout. The application also includes a product detail screen, light and dark themes, a search field, and category filters to make browsing gaming accessories easier and more user-friendly.
+GAMEHUB uses a responsive layout to provide a convenient browsing experience across different screen sizes. The application uses a single-column list layout for mobile screens with widths below 600 pixels, a two-column grid layout for tablet screens with widths from 600 to 839 pixels, and a three-column grid layout for desktop screens with widths of 840 pixels and above.
+
+The `LayoutBuilder` widget determines the available screen width and automatically selects the appropriate layout. The application also includes a product detail screen, light and dark themes, a search field, and category filters to make browsing gaming accessories easier and more user-friendly.
+
+## Extension Challenge – Search Field
+
+The Extension Challenge adds a search field to the GAMEHUB application. This feature allows users to search for gaming accessories by entering a product name. The displayed products are automatically filtered based on the user's search input, making it easier to find a specific item in the catalog.
+
+When no products match the entered search keyword, the application displays an empty search result message. Users can clear their search to display the product catalog again.
+
+### Search Field Screenshot
+
+![Extension Challenge – Search Field](screenshots/searchfield.png)
 
 ## Screenshots
 
@@ -115,7 +127,8 @@ catalog_app/
 │   ├── 02_tablet_grid.png
 │   ├── 03_desktop_grid.png
 │   ├── 04_product_detail.png
-│   └── 05_dark_mode.png
+│   ├── 05_dark_mode.png
+│   └── searchfield.png
 ├── test/
 │   └── widget_test.dart
 ├── pubspec.yaml
@@ -123,4 +136,5 @@ catalog_app/
 ```
 
 ---
+
 **GAMEHUB – Level Up Your Setup!**
